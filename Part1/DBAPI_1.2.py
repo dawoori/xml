@@ -2,11 +2,11 @@
 
 import pymysql
 
-conn = pymysql.connect(host='localhost', user='guest', password='bemyguest', db='kleague', charset='utf8')
+conn = pymysql.connect(host='localhost', user='root', password='224800', db='kleague', charset='utf8')
 
 cursor = conn.cursor()	    # tuple based cursor
 
-sql = "INSERT INTO player(player_id, player_name, team_id, position) VALUES (%s, %s, %s, %s)"
+sql = "INSERT INTO PLAYER(PLAYER_ID, PLAYER_NAME, TEAM_ID, POSITION) VALUES (%s, %s, %s, %s)"
 cursor.execute(sql, ('2020001', '손홍민', 'K01', 'FW'))
 cursor.execute(sql, ('2020002', '호날두', 'K02', 'FW'))
 conn.commit()

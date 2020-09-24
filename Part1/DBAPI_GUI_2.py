@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import *
 class DB_Utils:
 
     def queryExecutor(self, db, sql, params):
-        conn = pymysql.connect(host='localhost', user='guest', password='bemyguest', db=db, charset='utf8')
+        conn = pymysql.connect(host='localhost', user='root', password='224800', db=db, charset='utf8')
 
         try:
             with conn.cursor(pymysql.cursors.DictCursor) as cursor:     # dictionary based cursor
@@ -20,7 +20,7 @@ class DB_Utils:
             conn.close()
 
     def updateExecutor(self, db, sql, params):
-        conn = pymysql.connect(host='localhost', user='root', password='hyeokman', db=db, charset='utf8')
+        conn = pymysql.connect(host='localhost', user='root', password='224800', db=db, charset='utf8')
 
         try:
             with conn.cursor() as cursor:

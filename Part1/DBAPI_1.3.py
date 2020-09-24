@@ -2,7 +2,7 @@
 
 import pymysql
 
-conn = pymysql.connect(host='localhost', user='guest', password='bemyguest', db='kleague', charset='utf8')
+conn = pymysql.connect(host='localhost', user='root', password='224800', db='kleague', charset='utf8')
 
 cursor = conn.cursor()	    # tuple based cursor
 
