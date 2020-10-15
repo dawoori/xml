@@ -2,3 +2,5 @@
 .idea
 *.iml
 Part2/*.csv
+Part2/*.json
+Part2/*.xml

@@ -50,6 +50,7 @@ xmlString = '''
 
 # XML 스트링을 XDM 트리로 메모리에 로딩
 rootElement = ET.fromstring(xmlString)
+print(rootElement.tag, rootElement.attrib)
 
 # XDM 트리를 파이썬 객체로 변환
 players = []
