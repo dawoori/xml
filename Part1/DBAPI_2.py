@@ -4,34 +4,37 @@ import pymysql
 
 conn = pymysql.connect(host='localhost', user='guest', password='bemyguest', db='kleague', charset='utf8')
 
-cursor = conn.cursor(pymysql.cursors.DictCursor)	# dictionary based cursor
+cursor = conn.cursor(pymysql.cursors.DictCursor)    # dictionary based cursor, 딕셔너리의 리스트
 
 sql = "SELECT * FROM player"
 cursor.execute(sql)
 
-tuples = cursor.fetchall()      # 딕셔너리 타입의 리스트, 어레이 처럼 처리
-print(tuples)
-print(len(tuples))
-print('')
+players = cursor.fetchall()      # 딕셔너리의 리스트
+print(len(players))
+print(players)
+print()
 
-print(tuples[0])
+print(players[0])
 # {'PLAYER_ID': '2000001', 'PLAYER_NAME': '김태호', 'TEAM_ID': 'K10', 'E_PLAYER_NAME': None, 'NICKNAME': None, 'JOIN_YYYY': None, 'POSITION': 'DF', 'BACK_NO': None, 'NATION': None, 'BIRTH_DATE': datetime.date(1971, 1, 29), 'SOLAR': '1', 'HEIGHT': None, 'WEIGHT': None}
-print('')
+print()
 
 # value만 출력할 때
-columnNames = list(tuples[0].keys())
-for tuple in tuples:
-    for columnName in columnNames:
-        print(tuple[columnName], end=' ')
-    print('')
+columnNames = list(players[0].keys())
+print(columnNames)
+print()
 
-print('')
+for player in players:              # player는 딕셔너리임.
+    for columnName in columnNames:
+        print(player[columnName], end=' ')
+    print()
+
+print()
 
 # Key와 value를 같이 출력할 때
-for tuple in tuples:
-    kvlist = list(tuple.items())
+for player in players:              # player는 딕셔너리임.
+    kvlist = list(player.items())
     for (k, v) in kvlist:
         print(k, v, end=', ')
-    print('')
+    print()
 
 conn.close()

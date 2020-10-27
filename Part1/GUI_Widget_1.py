@@ -30,7 +30,7 @@ class MainWindow(QWidget):          # QWidget 클래스의 서브클래스
 
 #########################################
 
-if __name__ == "__main__":          # GUI_test.py가 실행될 때 __main__ (True), import될 때는 모듈명 (False)
+if __name__ == "__main__":          # GUI_Widget_1.py가 실행될 때 __main__ (True), import될 때는 모듈명 (False)
     app = QApplication(sys.argv)    # event loop 생성을 위해 QApplication 객체를 생성함.
     mainWindow = MainWindow()       # 윈도우를 생성함.
     mainWindow.show()

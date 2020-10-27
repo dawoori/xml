@@ -1,8 +1,7 @@
-# DB Table을 읽어서, XML 화일에 쓰는 예제
+# DB Table을 읽어서, Pandas DataFrame으로 처리하는 예제
 
 import pymysql
-import xml.etree.ElementTree as ET
-import datetime
+import pandas as pd
 
 class DB_Utils:
 
@@ -32,7 +31,7 @@ class DB_Queries:
 
 #########################################
 
-def readDB_writeXML():
+def readDB_writePandas():
 
     # DB 검색문 실행
     query = DB_Queries()
@@ -41,36 +40,28 @@ def readDB_writeXML():
     print(players)
     print()
 
-    # 애트리뷰트 BIRTH_DATE의 값을 MySQL datetime 타입에서 스트링으로 변환함. (CSV에서는 패키지가 변환함.)
-    for player in players:
-        for k, v in player.items():
-            if isinstance(v, datetime.date):
-                player[k] = v.strftime('%Y-%m-%d')      # 키가 k인 item의 값 v를 수정
+    # 행 우선 구조를 열 우선 구조로 변환함.
+    columnNames = list(players[0].keys())
+    playersCW = {}
 
-    newDict = dict(playerGK = players)
-    print(newDict)
+    for columnName in columnNames:
+        playersCW[columnName] = []
 
-    # XDM 트리 생성
-    tableName = list(newDict.keys())[0]
-    tableRows = list(newDict.values())[0]
+    print(playersCW)
+    print()
 
-    rootElement = ET.Element('Table')
-    rootElement.attrib['name'] = tableName
+    for rowIDX in range(len(players)):
+        for columnName in columnNames:              # BIRTH_DATE의 경우, 변환을 자동으로 해줌.
+            playersCW[columnName].append(players[rowIDX][columnName])
 
-    for row in tableRows:
-        rowElement = ET.Element('Row')
-        rootElement.append(rowElement)
+    print(playersCW)
+    print()
 
-        for columnName in list(row.keys()):
-            if row[columnName] == None:  # NICKNAME, JOIN_YYYY, NATION 처리
-                rowElement.attrib[columnName] = ''
-            else:
-                rowElement.attrib[columnName] = row[columnName]
+    # pandas DataFrame으로 생성
+    df = pd.DataFrame(playersCW)
+    print(df)
 
-            if type(row[columnName]) == int:  # BACK_NO, HEIGHT, WEIGHT 처리
-                rowElement.attrib[columnName] = str(row[columnName])
+    print(df['BIRTH_DATE'])
+    print()
 
-    # XDM 트리를 화일에 출력
-    ET.ElementTree(rootElement).write('playerGK.xml', encoding='utf-8', xml_declaration=True)
-
-readDB_writeXML()
+readDB_writePandas()

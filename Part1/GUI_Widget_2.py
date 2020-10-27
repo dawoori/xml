@@ -55,9 +55,10 @@ class MainWindow(QMainWindow):          # QWidget > QMainWindow 클래스의 서
         msg = "저장하시겠습니까?"
         msg += "\n이름 : " + self.lineEdit.text()
         buttonReply = QMessageBox.question(self, "저장 확인", msg, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                                                                        # "YES", "NO" push button 제공
 
         if buttonReply == QMessageBox.Yes:
-            QMessageBox.about(self, "저장", "저장되었습니다.")
+            QMessageBox.about(self, "저장", "저장되었습니다.")             # "OK" push button 제공
             self.statusBar.showMessage("저장되었습니다.")
         if buttonReply == QMessageBox.No:
             QMessageBox.about(self, "저장 취소", "저장되지 않았습니다.")

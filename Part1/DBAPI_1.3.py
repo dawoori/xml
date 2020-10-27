@@ -2,11 +2,11 @@
 
 import pymysql
 
-conn = pymysql.connect(host='localhost', user='root', password='224800', db='kleague', charset='utf8')
+conn = pymysql.connect(host='localhost', user='guest', password='bemyguest', db='kleague', charset='utf8')
 
-cursor = conn.cursor()	    # tuple based cursor
+cursor = conn.cursor()	    # tuple based cursor, 투플의 투플
 
-newPlayers = (
+newPlayers = (                              # 투플 타입의 투플
     ('2020001', '손홍민', 'K01', 'FW'),
     ('2020002', '호날두', 'K02', 'FW'),
     ('2020003', '메시', 'K03', 'FW')
@@ -18,7 +18,7 @@ conn.commit()
 sql = "SELECT * FROM player"
 cursor.execute(sql)
 tuples = cursor.fetchall()
-print(tuples)
 print(len(tuples))
+print(tuples)
 
 conn.close()

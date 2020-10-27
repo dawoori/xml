@@ -1,12 +1,11 @@
 import pymysql
-
-import sys, datetime
 from PyQt5.QtWidgets import *
+import sys, datetime
 
 class DB_Utils:
 
     def queryExecutor(self, db, sql, params):
-        conn = pymysql.connect(host='localhost', user='root', password='224800', db=db, charset='utf8')
+        conn = pymysql.connect(host='localhost', user='guest', password='bemyguest', db=db, charset='utf8')
 
         try:
             with conn.cursor(pymysql.cursors.DictCursor) as cursor:     # dictionary based cursor
@@ -20,7 +19,7 @@ class DB_Utils:
             conn.close()
 
     def updateExecutor(self, db, sql, params):
-        conn = pymysql.connect(host='localhost', user='root', password='224800', db=db, charset='utf8')
+        conn = pymysql.connect(host='localhost', user='root', password='hyeokman', db=db, charset='utf8')
 
         try:
             with conn.cursor() as cursor:
@@ -32,9 +31,18 @@ class DB_Utils:
         finally:
             conn.close()
 
-class DB_Query:
+class DB_Queries:
     # 모든 검색문은 여기에 각각 하나의 메소드로 정의
-    def selectPlayer(self, value):
+
+    def selectPlayerPosition(self):
+        sql = "SELECT DISTINCT position FROM player"
+        params = ()
+
+        util = DB_Utils()
+        tuples = util.queryExecutor(db="kleague", sql=sql, params=params)
+        return tuples
+
+    def selectPlayerUsingPosition(self, value):
         if value == '없음':
             sql = "SELECT * FROM player WHERE position IS NULL"
             params = ()
@@ -46,16 +54,9 @@ class DB_Query:
         tuples = util.queryExecutor(db="kleague", sql=sql, params=params)
         return tuples
 
-    def selectPlayerPosition(self):
-        sql = "SELECT DISTINCT position FROM player"
-        params = ()
-
-        util = DB_Utils()
-        tuples = util.queryExecutor(db="kleague", sql=sql, params=params)
-        return tuples
-
-class DB_Update:
+class DB_Updates:
     # 모든 갱신문은 여기에 각각 하나의 메소드로 정의
+
     def insertPlayer(self, player_id, player_name, team_id, position):
         sql = "INSERT INTO player (player_id, player_name, team_id, position) VALUES (%s, %s, %s, %s)"
         params = (player_id, player_name, team_id, position)
@@ -85,8 +86,10 @@ class MainWindow(QWidget):
         self.comboBox = QComboBox(self)
 
         # DB 검색문 실행
-        query = DB_Query()
+        query = DB_Queries()
         rows = query.selectPlayerPosition()        # rows은 dictionary의 리스트
+        print(rows)
+        print()
         # [{'position': 'DF'}, {'position': 'FW'}, {'position': None}, {'position': 'MF'}, {'position': 'GK'}]
 
         columnName = list(rows[0].keys())[0]
@@ -122,8 +125,8 @@ class MainWindow(QWidget):
     def pushButton_Clicked(self):
 
         # DB 검색문 실행
-        query = DB_Query()
-        players = query.selectPlayer(self.positionValue)
+        query = DB_Queries()
+        players = query.selectPlayerUsingPosition(self.positionValue)
 
         self.tableWidget.clearContents()
         self.tableWidget.setRowCount(len(players))

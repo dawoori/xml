@@ -14,14 +14,14 @@ class MainWindow(QWidget):
         layout = QGridLayout()
         self.setLayout(layout)
 
-        buttonNames = ['1', '2', '3','4', '5', '6', '7', '8', '9']
+        buttonNames = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 
-        positions = [(r, c) for r in range(3) for c in range(3)]
+        positions = [(row, col) for row in range(3) for col in range(3)]
 
-        for name, position in zip(buttonNames, positions):
+        for name, position in zip(buttonNames, positions):          # zip function
             button = QPushButton(name)
             button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-            layout.addWidget(button, *position)
+            layout.addWidget(button, *position)                     # * operator, 즉 layout.addWidget(button, row, col)
 
 #########################################
 

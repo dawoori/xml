@@ -2,7 +2,7 @@
 
 import xml.etree.ElementTree as ET
 
-# 파이썬 객체를 메모리에 fheldgkdu,XML 스트링 (XDM 트리)로 변환.
+# 파이썬 객체를 XML 스트링 (XDM 트리)로 변환.
 
 newDict = {
     'PLAYER': [
@@ -15,6 +15,9 @@ newDict = {
 # XDM 트리 생성
 tableName = list(newDict.keys())[0]
 tableRows = list(newDict.values())[0]
+print(tableName)
+print(tableRows)
+print()
 
 rootElement = ET.Element('Table')
 rootElement.attrib['name'] = tableName
@@ -38,7 +41,7 @@ ET.dump(rootElement)
 print()
 
 #########################################
-# XML 스트링을 XDM 트리로 메모리에 로딩하여, 파이선 객체로 변환
+# XML 스트링 (XDM 트리)을 파이썬 객체로 변환
 
 xmlString = '''
     <Table name="PLAYER">
@@ -49,19 +52,22 @@ xmlString = '''
 '''
 
 # XML 스트링을 XDM 트리로 메모리에 로딩
-rootElement = ET.fromstring(xmlString)
-print(rootElement.tag, rootElement.attrib)
+rootElement = ET.fromstring(xmlString)      # tree 전체가 아니라 root element만 가져옴.
+print(rootElement.tag, rootElement.attrib, end='')
+print()
 
 # XDM 트리를 파이썬 객체로 변환
 players = []
 for childElement in rootElement:
-    print(childElement.tag, childElement.attrib)
+    print(childElement.tag, childElement.attrib, end='')        # 모든 애트리뷰트를 딕셔너리로 리턴함.
+    print()
     players.append(childElement.attrib)
-
 print()
+
 print(players)
 print()
 
 newDict = {}
-newDict[list(rootElement.attrib.values())[0]] = players         # newDict['PLAYER'] = players
+tableName = rootElement.attrib['name']          # tableName = list(rootElement.attrib.values())[0]
+newDict[tableName] = players                    # newDict['PLAYER'] = players
 print(newDict)

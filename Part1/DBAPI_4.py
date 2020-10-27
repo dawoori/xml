@@ -6,11 +6,11 @@ conn = pymysql.connect(host='localhost', user='guest', password='bemyguest', db=
 
 try:
     with conn.cursor() as cursor:
-        sql = "SELECT * FROM %s WHERE position = %s"
-        params = ('player', 'GK')
+        sql = "SELECT * FROM player WHERE position = %s"        # dynamic SQL
+        params = ('GK')
         cursor.execute(sql, params)
-        tuples = cursor.fetchall()
-        print(tuples)
+        players = cursor.fetchall()
+        print(players)
 except Exception as e:
     print(e)
     print(type(e))

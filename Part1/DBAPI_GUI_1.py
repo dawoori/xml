@@ -1,7 +1,6 @@
 import pymysql
-
-import sys, datetime
 from PyQt5.QtWidgets import *
+import sys, datetime
 
 class DB_Utils:
 
@@ -32,9 +31,9 @@ class DB_Utils:
         finally:
             conn.close()
 
-class DB_Query:
+class DB_Queries:
     # 모든 검색문은 여기에 각각 하나의 메소드로 정의
-    def selectPlayer(self, position):
+    def selectPlayerUsingPosition(self, position):
         sql = "SELECT * FROM player WHERE position = %s"
         params = (position)                                 # 실제 파라미터 값의 튜플
 
@@ -42,7 +41,7 @@ class DB_Query:
         tuples = util.queryExecutor(db="kleague", sql=sql, params=params)
         return tuples
 
-class DB_Update:
+class DB_Updates:
     # 모든 갱신문은 여기에 각각 하나의 메소드로 정의
     def insertPlayer(self, player_id, player_name, team_id, position):
         sql = "INSERT INTO player (player_id, player_name, team_id, position) VALUES (%s, %s, %s, %s)"
@@ -61,8 +60,9 @@ class MainWindow(QWidget):
     def setupUI(self):
 
         # DB 검색문 실행
-        query = DB_Query()
-        players = query.selectPlayer("GK")
+        query = DB_Queries()
+        players = query.selectPlayerUsingPosition("GK")     # 딘셔너리의 리스트
+        print(players)
 
         # 윈도우 설정
         self.setWindowTitle("DBAPI를 통한 테이블 위젯 생성 예제")
@@ -72,8 +72,8 @@ class MainWindow(QWidget):
         self.tableWidget = QTableWidget(self)   # QTableWidget 객체 생성
         self.tableWidget.move(50, 50)
         self.tableWidget.resize(1000, 500)
-        self.tableWidget.setRowCount(len(players))
-        self.tableWidget.setColumnCount(len(players[0]))
+        self.tableWidget.setRowCount(len(players))              # 43
+        self.tableWidget.setColumnCount(len(players[0]))        # 13
         columnNames = list(players[0].keys())
         # ['PLAYER_ID', 'PLAYER_NAME', 'TEAM_ID', 'E_PLAYER_NAME', 'NICKNAME', 'JOIN_YYYY', 'POSITION', 'BACK_NO', 'NATION', 'BIRTH_DATE', 'SOLAR', 'HEIGHT', 'WEIGHT']
         self.tableWidget.setHorizontalHeaderLabels(columnNames)

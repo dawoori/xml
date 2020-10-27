@@ -6,7 +6,7 @@ import csv
 class DB_Utils:
 
     def updateExecutor(self, db, sql, params):
-        conn = pymysql.connect(host='localhost', user='root', password='224800', db=db, charset='utf8')
+        conn = pymysql.connect(host='localhost', user='root', password='hyeokman', db=db, charset='utf8')
 
         try:
             with conn.cursor() as cursor:
@@ -59,7 +59,7 @@ class DB_Updates:
 
 #########################################
 
-def readCSVwriteDB_Dictionary():
+def readCSV_writeDB_Dictionary():
 
     # DB에 PlayerGK 테이블을 생성
     update = DB_Updates()
@@ -78,8 +78,13 @@ def readCSVwriteDB_Dictionary():
 
         for player in players:
             row = []
+
             for columnName in columnNames:
+                if columnName == 'BIRTH_DATE' and player[columnName] == '':     # MySQL에서 datetime 타입에 ''은 에러임. (BIRTH_DATE 처리)
+                    player[columnName] = None
+
                 row.append(player[columnName])
+
             print(row)
 
             update.populatePlayerGK(*row)       # * operator 사용
@@ -91,4 +96,4 @@ def readCSVwriteDB_Dictionary():
 
 #           update.populatePlayerGK(*row)  # * operator
 
-readCSVwriteDB_Dictionary()
+readCSV_writeDB_Dictionary()

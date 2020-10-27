@@ -31,7 +31,7 @@ class DB_Utils:
         finally:
             conn.close()
 
-class DB_Query:
+class DB_Queries:
     # 모든 검색문은 여기에 각각 하나의 메소드로 정의
 
     def selectPlayer(self, position):
@@ -42,7 +42,7 @@ class DB_Query:
         tuples = util.queryExecutor(db="kleague", sql=sql, params=params)
         return tuples
 
-class DB_Update:
+class DB_Updates:
     # 모든 갱신문은 여기에 각각 하나의 메소드로 정의
 
     def insertPlayer(self, player_id, player_name, team_id, position):
@@ -55,14 +55,15 @@ class DB_Update:
 #########################################
 
 if __name__ == "__main__":      # DBAPI_5.py가 실행될 때 __main__ (True), import될 때는 모듈명 즉 DBAPI_5 (False)
-    query = DB_Query()
+    query = DB_Queries()
     players = query.selectPlayer("GK")
-    print(players)
     print(len(players))
+    print(players)
+    print()
 
-    update = DB_Update()
+    update = DB_Updates()
     update.insertPlayer("2020001", "홍길동", "K01", "GK")
 
     players = query.selectPlayer("GK")
-    print(players)
     print(len(players))
+    print(players)
