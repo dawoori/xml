@@ -33,6 +33,13 @@ class DB_Utils:
 
 class DB_Queries:
     # 모든 검색문은 여기에 각각 하나의 메소드로 정의
+    def selectPlayerTeam(self):
+        sql = "SELECT DISTINCT team_id FROM player"
+        params = ()
+
+        util = DB_Utils()
+        tuples = util.queryExecutor(db="kleague", sql=sql, params=params)
+        return tuples
 
     def selectPlayerPosition(self):
         sql = "SELECT DISTINCT position FROM player"
@@ -42,8 +49,16 @@ class DB_Queries:
         tuples = util.queryExecutor(db="kleague", sql=sql, params=params)
         return tuples
 
+    def selectPlayerNation(self):
+        sql = "SELECT DISTINCT nation FROM player"
+        params = ()
+
+        util = DB_Utils()
+        tuples = util.queryExecutor(db="kleague", sql=sql, params=params)
+        return tuples
+
     def selectPlayerUsingPosition(self, value):
-        if value == '없음':
+        if value == '미정':
             sql = "SELECT * FROM player WHERE position IS NULL"
             params = ()
         else:
@@ -74,44 +89,84 @@ class MainWindow(QWidget):
     def setupUI(self):
 
         # 윈도우 설정
-        self.setWindowTitle("DBAPI를 통한 테이블 위젯 제어 예제")
+        self.setWindowTitle("선수 테이블 검색")
         self.setGeometry(0, 0, 1100, 620)
 
         # 라벨 설정
-        self.label = QLabel("POSITION", self)
-        self.label.move(200, 50)
-        self.label.resize(100, 20)
+        self.teamLabel = QLabel("팀명", self)
+        self.teamLabel.move(100, 25)
+        self.teamLabel.resize(50, 20)
 
-        # 콤보박스 설정
-        self.comboBox = QComboBox(self)
+        self.positionLabel = QLabel("포지션", self)
+        self.positionLabel.move(300, 25)
+        self.positionLabel.resize(50, 20)
 
-        # DB 검색문 실행
+        self.nationLabel = QLabel("출신국", self)
+        self.nationLabel.move(500, 25)
+        self.nationLabel.resize(50, 20)
+
+        self.heightLabel = QLabel("키", self)
+        self.heightLabel.move(100, 50)
+        self.heightLabel.resize(50, 20)
+
+        self.weighttLabel = QLabel("몸무게", self)
+        self.weighttLabel.move(500, 50)
+        self.weighttLabel.resize(50, 20)
+
+        # 콤보박스
         query = DB_Queries()
-        rows = query.selectPlayerPosition()        # rows은 dictionary의 리스트
-        print(rows)
-        print()
-        # [{'position': 'DF'}, {'position': 'FW'}, {'position': None}, {'position': 'MF'}, {'position': 'GK'}]
+        positionRows = query.selectPlayerPosition()
+        teamRows = query.selectPlayerTeam()
+        nationRows = query.selectPlayerNation()
 
-        columnName = list(rows[0].keys())[0]
-        items = ['없음' if row[columnName] == None else row[columnName] for row in rows]
-        self.comboBox.addItems(items)
+        self.teamComboBox = QComboBox(self)
+        self.teamComboBox.move(150, 25)
+        self.teamComboBox.resize(100, 20)
+
+        self.positionComboBox = QComboBox(self)
+        self.positionComboBox.move(350, 25)
+        self.positionComboBox.resize(100, 20)
+
+        self.nationComboBox = QComboBox(self)
+        self.nationComboBox.move(550, 25)
+        self.nationComboBox.resize(100, 20)
+
+        teamColumnName = list(teamRows[0].keys())[0]
+        items = ['없음' if row[teamColumnName] == None else row[teamColumnName] for row in teamRows]
+        items.insert(0, "사용안함")
+        self.teamComboBox.addItems(items)
+
+        positionColumnName = list(positionRows[0].keys())[0]
+        items = ['미정' if row[positionColumnName] == None else row[positionColumnName] for row in positionRows]
+        items.insert(0, "사용안함")
+        self.positionComboBox.addItems(items)
+
+        nationColumnName = list(nationRows[0].keys())[0]
+        items = ['대한민국' if row[nationColumnName] == None else row[nationColumnName] for row in nationRows]
+        items.insert(0, "사용안함")
+        self.nationComboBox.addItems(items)
 
         # for row in rows:
         #     item = list(row.values()).pop(0)
         #     if item == None:
-        #         self.comboBox.addItem('없음')
+        #         self.positionComboBox.addItem('없음')
         #     else:
-        #         self.comboBox.addItem(item)
+        #         self.positionComboBox.addItem(item)
 
-        self.comboBox.move(300, 50)
-        self.comboBox.resize(100, 20)
-        self.comboBox.activated.connect(self.comboBox_Activated)
+        self.teamComboBox.activated.connect(self.comboBox_Activated)
+        self.positionComboBox.activated.connect(self.comboBox_Activated)
 
         # 푸쉬버튼 설정
-        self.pushButton = QPushButton("Search", self)
-        self.pushButton.move(600, 50)
-        self.pushButton.resize(100, 20)
-        self.pushButton.clicked.connect(self.pushButton_Clicked)
+        self.searchButton = QPushButton("검색", self)
+        self.searchButton.move(900, 50)
+        self.searchButton.resize(100, 20)
+        self.searchButton.clicked.connect(self.searchButton_Clicked)
+
+        self.resetButton = QPushButton("초기화", self)
+        self.resetButton.move(900, 25)
+        self.resetButton.resize(100, 20)
+        self.resetButton.clicked.connect(self.searchButton_Clicked)
+
 
         # 테이블위젯 설정
         self.tableWidget = QTableWidget(self)   # QTableWidget 객체 생성
@@ -120,9 +175,9 @@ class MainWindow(QWidget):
 
     def comboBox_Activated(self):
 
-        self.positionValue = self.comboBox.currentText()  # positionValue를 통해 선택한 포지션 값을 전달
+        self.positionValue = self.positionComboBox.currentText()  # positionValue를 통해 선택한 포지션 값을 전달
 
-    def pushButton_Clicked(self):
+    def searchButton_Clicked(self):
 
         # DB 검색문 실행
         query = DB_Queries()
