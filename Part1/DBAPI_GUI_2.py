@@ -48,7 +48,7 @@ class DB_Queries:
             params = ()
         else:
             sql = "SELECT * FROM player WHERE position = %s"
-            params = (value)         # SQL문의 실제 파라미터 값의 튜플
+            params = [value]         # SQL문의 실제 파라미터 값의 튜플
 
         util = DB_Utils()
         tuples = util.queryExecutor(db="kleague", sql=sql, params=params)
