@@ -16,22 +16,22 @@ class MainWindow(QMainWindow):          # QWidget > QMainWindow 클래스의 서
         self.setStatusBar(self.statusBar)
 
         # 그룹박스 설정
-        self.GroupBox = QGroupBox("다음 중 과일이 아닌 것은?", self)
+        self.GroupBox = QGroupBox(self)
         self.GroupBox.move(50, 20)
-        self.GroupBox.resize(200, 100)
+        self.GroupBox.resize(230, 50)
 
         # 라디오 버튼 설정
-        self.radioBtn1 = QRadioButton("사과", self)
+        self.radioBtn1 = QRadioButton("사용안함", self)
         self.radioBtn1.move(60, 40)
         self.radioBtn1.setChecked(True)
         self.radioBtn1.clicked.connect(self.radioBtn_Clicked)
 
-        self.radioBtn2 = QRadioButton("딸기", self)
-        self.radioBtn2.move(60, 60)
+        self.radioBtn2 = QRadioButton("이상", self)
+        self.radioBtn2.move(150, 40)
         self.radioBtn2.clicked.connect(self.radioBtn_Clicked)
 
-        self.radioBtn3 = QRadioButton("곰", self)
-        self.radioBtn3.move(60, 80)
+        self.radioBtn3 = QRadioButton("미만", self)
+        self.radioBtn3.move(210, 40)
         self.radioBtn3.clicked.connect(self.radioBtn_Clicked)
 
     def radioBtn_Clicked(self):

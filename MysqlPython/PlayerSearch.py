@@ -69,6 +69,53 @@ class DB_Queries:
         tuples = util.queryExecutor(db="kleague", sql=sql, params=params)
         return tuples
 
+    def selectPlayer(self, sql):
+        params = ()
+        util = DB_Utils()
+        tuples = util.queryExecutor(db="kleague", sql=sql, params=params)
+        return tuples
+
+    def makeQuery(self, team, position, nation, height, heightUpDown, weight, weightUpDown):
+        sql = "SELECT * FROM player"
+        where = []
+        if team == "미정":
+            where.append("team_id IS NULL")
+        elif team != "사용안함":
+            where.append("team_id = \"" + team + "\"")
+
+        if position == "미정":
+            where.append("position IS NULL")
+        elif position != "사용안함":
+            where.append("position = \"" + position + "\"")
+
+        if nation == "대한민국":
+            where.append("nation IS NULL")
+        elif nation != "사용안함":
+            where.append("nation = \"" + nation + "\"")
+
+        if heightUpDown == "이상":
+            where.append("height >= " + height)
+        elif heightUpDown == "미만":
+            where.append("height < " + height)
+
+        if weightUpDown == "이상":
+            where.append("weight >= " + weight)
+        elif weightUpDown == "미만":
+            where.append("weight < " + weight)
+
+        if len(where) == 0:
+            return sql
+        else:
+            sql = sql + " WHERE"
+
+        for idx, q in enumerate(where):
+            if idx == 0:
+                sql = sql + " " + q
+            else:
+                sql = sql + " AND " + q
+
+        return sql
+
 class DB_Updates:
     # 모든 갱신문은 여기에 각각 하나의 메소드로 정의
 
@@ -98,20 +145,20 @@ class MainWindow(QWidget):
         self.teamLabel.resize(50, 20)
 
         self.positionLabel = QLabel("포지션", self)
-        self.positionLabel.move(300, 25)
+        self.positionLabel.move(320, 25)
         self.positionLabel.resize(50, 20)
 
         self.nationLabel = QLabel("출신국", self)
-        self.nationLabel.move(500, 25)
+        self.nationLabel.move(550, 25)
         self.nationLabel.resize(50, 20)
 
         self.heightLabel = QLabel("키", self)
         self.heightLabel.move(100, 50)
         self.heightLabel.resize(50, 20)
 
-        self.weighttLabel = QLabel("몸무게", self)
-        self.weighttLabel.move(500, 50)
-        self.weighttLabel.resize(50, 20)
+        self.weightLabel = QLabel("몸무게", self)
+        self.weightLabel.move(550, 50)
+        self.weightLabel.resize(50, 20)
 
         # 콤보박스
         query = DB_Queries()
@@ -124,11 +171,11 @@ class MainWindow(QWidget):
         self.teamComboBox.resize(100, 20)
 
         self.positionComboBox = QComboBox(self)
-        self.positionComboBox.move(350, 25)
+        self.positionComboBox.move(370, 25)
         self.positionComboBox.resize(100, 20)
 
         self.nationComboBox = QComboBox(self)
-        self.nationComboBox.move(550, 25)
+        self.nationComboBox.move(600, 25)
         self.nationComboBox.resize(100, 20)
 
         teamColumnName = list(teamRows[0].keys())[0]
@@ -146,15 +193,55 @@ class MainWindow(QWidget):
         items.insert(0, "사용안함")
         self.nationComboBox.addItems(items)
 
-        # for row in rows:
-        #     item = list(row.values()).pop(0)
-        #     if item == None:
-        #         self.positionComboBox.addItem('없음')
-        #     else:
-        #         self.positionComboBox.addItem(item)
-
         self.teamComboBox.activated.connect(self.comboBox_Activated)
         self.positionComboBox.activated.connect(self.comboBox_Activated)
+        self.nationComboBox.activated.connect(self.comboBox_Activated)
+
+        #
+        self.heightLine = QLineEdit(self)
+        self.heightLine.move(150, 50)
+        self.heightLine.resize(100, 20)
+
+        self.weightLine = QLineEdit(self)
+        self.weightLine.move(600, 50)
+        self.weightLine.resize(100, 20)
+
+        #
+        self.btngroup1 = QButtonGroup()
+        self.heightRadioBtn1 = QRadioButton("사용안함", self)
+        self.heightRadioBtn1.move(260, 50)
+        self.heightRadioBtn1.setChecked(True)
+        self.heightRadioBtn1.clicked.connect(self.heightRadioBtn_Clicked)
+
+        self.heightRadioBtn2 = QRadioButton("이상", self)
+        self.heightRadioBtn2.move(350, 50)
+        self.heightRadioBtn2.clicked.connect(self.heightRadioBtn_Clicked)
+
+        self.heightRadioBtn3 = QRadioButton("미만", self)
+        self.heightRadioBtn3.move(410, 50)
+        self.heightRadioBtn3.clicked.connect(self.heightRadioBtn_Clicked)
+
+        self.btngroup1.addButton(self.heightRadioBtn1)
+        self.btngroup1.addButton(self.heightRadioBtn2)
+        self.btngroup1.addButton(self.heightRadioBtn3)
+
+        self.btngroup2 = QButtonGroup()
+        self.weightRadioBtn1 = QRadioButton("사용안함", self)
+        self.weightRadioBtn1.move(260 + 400, 50)
+        self.weightRadioBtn1.setChecked(True)
+        self.weightRadioBtn1.clicked.connect(self.weightRadioBtn_Clicked)
+
+        self.weightRadioBtn2 = QRadioButton("이상", self)
+        self.weightRadioBtn2.move(350 + 400, 50)
+        self.weightRadioBtn2.clicked.connect(self.weightRadioBtn_Clicked)
+
+        self.weightRadioBtn3 = QRadioButton("미만", self)
+        self.weightRadioBtn3.move(410 + 400, 50)
+        self.weightRadioBtn3.clicked.connect(self.weightRadioBtn_Clicked)
+
+        self.btngroup2.addButton(self.weightRadioBtn1)
+        self.btngroup2.addButton(self.weightRadioBtn2)
+        self.btngroup2.addButton(self.weightRadioBtn3)
 
         # 푸쉬버튼 설정
         self.searchButton = QPushButton("검색", self)
@@ -165,7 +252,7 @@ class MainWindow(QWidget):
         self.resetButton = QPushButton("초기화", self)
         self.resetButton.move(900, 25)
         self.resetButton.resize(100, 20)
-        self.resetButton.clicked.connect(self.searchButton_Clicked)
+        self.resetButton.clicked.connect(self.resetButton_Clicked)
 
 
         # 테이블위젯 설정
@@ -174,11 +261,65 @@ class MainWindow(QWidget):
         self.tableWidget.resize(1000, 500)
 
     def comboBox_Activated(self):
-
+        self.teamValue = self.teamComboBox.currentText()
         self.positionValue = self.positionComboBox.currentText()  # positionValue를 통해 선택한 포지션 값을 전달
+        self.nationValue = self.nationComboBox.currentText()
+
+    def heightRadioBtn_Clicked(self):
+        msg = ""
+        if self.heightRadioBtn1.isChecked():
+            msg = "사용안함"
+        elif self.heightRadioBtn2.isChecked():
+            msg = "이상"
+        else:
+            msg = "미만"
+        self.heightUpDown = msg
+
+    def weightRadioBtn_Clicked(self):
+        msg = ""
+        if self.weightRadioBtn1.isChecked():
+            msg = "사용안함"
+        elif self.weightRadioBtn2.isChecked():
+            msg = "이상"
+        else:
+            msg = "미만"
+        self.weightUpDown = msg
+
+    def resetButton_Clicked(self):
+        print(self.heightLine.text())
+        # DB 검색문 실행
+        query = DB_Queries()
+        sql = query.makeQuery("사용안함", "DF", "대한민국", "150", "이상", "70", "이상")
+        print(sql)
+        players = query.selectPlayer(sql)
+
+        self.tableWidget.clearContents()
+        self.tableWidget.setRowCount(len(players))
+        self.tableWidget.setColumnCount(len(players[0]))
+        columnNames = list(players[0].keys())
+        self.tableWidget.setHorizontalHeaderLabels(columnNames)
+        self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+        for rowIDX in range(len(players)):
+            player = players[rowIDX]
+
+            for k, v in player.items():
+                columnIDX = columnNames.index(k)
+
+                if v == None:           # 파이썬이 DB의 널값을 None으로 변환함.
+                    continue            # QTableWidgetItem 객체를 생성하지 않음
+                elif isinstance(v, datetime.date):      # QTableWidgetItem 객체 생성
+                    item = QTableWidgetItem(v.strftime('%Y-%m-%d'))
+                else:
+                    item = QTableWidgetItem(str(v))
+
+                self.tableWidget.setItem(rowIDX, columnIDX, item)
+
+        self.tableWidget.resizeColumnsToContents()
+        self.tableWidget.resizeRowsToContents()
 
     def searchButton_Clicked(self):
-
+        print(self.heightLine.text())
         # DB 검색문 실행
         query = DB_Queries()
         players = query.selectPlayerUsingPosition(self.positionValue)
@@ -216,4 +357,5 @@ def main():
     mainWindow.show()
     sys.exit(app.exec_())
 
-main()
+if __name__ == "__main__":
+    main()
