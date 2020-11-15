@@ -262,7 +262,7 @@ class MainWindow(QWidget):
 
     def comboBox_Activated(self):
         self.teamValue = self.teamComboBox.currentText()
-        self.positionValue = self.positionComboBox.currentText()  # positionValue를 통해 선택한 포지션 값을 전달
+        self.positionValue = self.positionComboBox.currentText()
         self.nationValue = self.nationComboBox.currentText()
 
     def heightRadioBtn_Clicked(self):
