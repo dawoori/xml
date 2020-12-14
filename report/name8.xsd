@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+                xmlns:contacts="http://www.example.com/contacts"
+                targetNamespace="http://www.example.com/contacts"
+                elementFormDefault="qualified">
+
+   <group name="NameGroup">
+      <sequence>
+         <element name="first" type="string" minOccurs="1" maxOccurs="unbounded"/>
+         <element name="middle" type="string" minOccurs="0" maxOccurs="1"/>
+         <element name="last" type="string"/>
+      </sequence>
+   </group>
+
+   <complexType name="NameType">
+      <group ref="contacts:NameGroup"/>
+      <attribute name="title" type="string"/>
+   </complexType>
+   <element name="name" type="contacts:NameType"/>
+
+</schema>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.example.com/contacts" targetNamespace="http://www.example.com/contacts" elementFormDefault="qualified">
+	<xs:group name="NameGroup">
+		<xs:sequence>
+			<xs:element name="first" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="middle" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="last" type="xs:string"/>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="NameType">
+		<xs:group ref="NameGroup"/>
+		<xs:attribute name="title" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="LocationType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="address" type="xs:string"/>
+			<xs:sequence>
+				<xs:element name="latitude" type="xs:float"/>
+				<xs:element name="longitude" type="xs:float"/>
+			</xs:sequence>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="KnowsType">
+		<xs:attribute name="contacts" type="xs:IDREFS"/>
+	</xs:complexType>
+	
+	
+	<xs:complexType name="DescriptionType" mixed="true">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="em" type="xs:string"/>
+			<xs:element name="strong" type="xs:string"/>
+			<xs:element name="br" type="xs:string"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="PhoneType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="kind" type="xs:string" default="Home"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:simpleType name="ContactTagsType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="author"/>
+			<xs:enumeration value="xml"/>
+			<xs:enumeration value="poetry"/>
+			<xs:enumeration value="consultant"/>
+			<xs:enumeration value="w3c"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ContactTagsListType">
+		<xs:list itemType="ContactTagsType"/>
+	</xs:simpleType>
+	<xs:attributeGroup name="ContactAttributes">
+		<xs:attribute name="version" type="xs:decimal" fixed="1.0"/>
+		<xs:attribute name="source" type="xs:string"/>
+	</xs:attributeGroup>
+	<xs:element name="contacts">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="contact" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="name" type="NameType"/>
+							<xs:element name="location" type="LocationType"/>
+							<xs:element name="phone" type="PhoneType"/>
+							<xs:element name="knows" type="KnowsType"/>
+							<xs:element name="description" type="DescriptionType"/>
+						</xs:sequence>
+						<xs:attribute name="tags" type="ContactTagsListType"/>
+						<xs:attribute name="person" type="xs:ID"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attributeGroup ref="ContactAttributes"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

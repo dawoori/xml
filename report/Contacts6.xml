@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contacts xmlns="http://www.example.com/contacts"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.example.com/contacts contacts6.xsd"
+               source="Beginning XML 5E" version="1.0">
+
+   <contact person="Joe_Fawcett" tags="author xml poetry">
+      <name>
+         <first>Joseph</first>
+         <first>John</first>
+         <last>Fawcett</last>
+      </name>
+      <location>
+         <address>Exeter, UK</address>
+         <latitude>50.7218</latitude>
+         <longitude>-3.533617</longitude>
+      </location>
+      <phone kind="Home">001-234-567-8910</phone>
+      <knows contacts="Liam_Quin Danny_Ayers"/>
+      <description> Joseph is a developer and author for Beginning XML<em>5th edition </em>.<br/>Joseph <strong>loves</strong> XML!</description>
+   </contact>
+
+   <contact person="Liam_Quin" tags="author consultant w3c">
+      <name>
+         <first>Liam</first>
+         <last>Quin</last>
+      </name>
+      <location>
+         <address>Ontario, Canada</address>
+      </location>
+      <phone>+1 613 476 8769</phone>
+      <knows contacts="Joe_Fawcett Danny_Ayers"/>
+      <description>XML Activity Lead at W3C</description>
+   </contact>
+   
+      <contact person="Danny_Ayers" tags="author xml poetry">
+      <name>
+         <first>Danny</first>
+         <last>Ayers</last>
+      </name>
+      <location>
+         <address>...</address>
+         <latitude>20.5</latitude>
+         <longitude>30.5</longitude>
+      </location>
+      <phone kind="Home">001-234-567-8910</phone>
+      <knows contacts="Liam_Quin"/>
+      <description> ...</description>
+   </contact>
+
+</contacts>
