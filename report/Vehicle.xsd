@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:db="http://www.example.com/db"
+        targetNamespace="http://www.example.com/db"
+        elementFormDefault="qualified">
+
+    <complexType name="VehicleType">
+        <sequence>
+            <element name="Body" type="string"/>
+            <element name="DriveTrain" type="string"/>
+        </sequence>
+    </complexType>
+    
+    <element name="Vehicle">
+        <complexType>
+            <attribute name="type" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="Vehicles">
+        <complexType>
+            <sequence>
+                <element ref="db:Vehicle" minOccurs="0" maxOccurs="unbounded" />
+            </sequence>
+        </complexType>
+    </element>
+</schema>
