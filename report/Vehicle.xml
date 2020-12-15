@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vehicles xmlns="http://www.example.com/db"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.example.com/db Vehicle.xsd"
+          >
+    <Vehicle>
+        <Automobile>
+            <Body>Nice</Body>
+            <DriveTrain>
+                <Engine>dd</Engine>
+                <Transmission>afk</Transmission>
+            </DriveTrain>
+            <Trunk>128L</Trunk>
+        </Automobile>
+    </Vehicle>
+</Vehicles>
