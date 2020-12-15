@@ -4,16 +4,17 @@
         targetNamespace="http://www.example.com/db"
         elementFormDefault="qualified">
 
+    <complexType name="DriveTrainType">
+        <sequence>
+            <element name="Engine" type="string"/>
+            <element name="Transmission" type="string"/>
+        </sequence>
+    </complexType>
+
     <complexType name="VehicleType">
         <sequence>
             <element name="Body" type="string"/>
-            <element name="DriveTrain">
-                <complexType>
-                    <sequence>
-                        <element name="Engine" type="string"/>
-                        <element name="Transmission" type="string"/>
-                    </sequence>
-                </complexType>
+            <element name="DriveTrain" type="db:DriveTrainType">
             </element>
         </sequence>
     </complexType>
@@ -29,21 +30,32 @@
     </complexType>
 
     <complexType name="SedanType">
-        <simpleContent>
+        <complexContent>
             <extension base="db:AutomobileType"/>
-        </simpleContent>
+        </complexContent>
     </complexType>
 
+    <complexType name="ConvertibleType">
+        <complexContent>
+            <extension base="db:AutomobileType">
+                <sequence>
+                    <element name="OperatingRoof" type="string" minOccurs="0"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
 
+    <complexType name="TruckType">
+        <complexContent>
+            <extension base="db:VehicleType">
+                <sequence>
+                    <element name="Compartment" type="string"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
 
-    <element name="Vehicle">
-        <complexType>
-            <choice>
-                <element name="Vehicle" type="db:VehicleType"/>
-                <element name="Automobile" type="db:AutomobileType"/>
-            </choice>
-        </complexType>
-    </element>
+    <element name="Vehicle"></element>
 
     <element name="Vehicles">
         <complexType>

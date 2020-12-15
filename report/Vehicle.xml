@@ -1,16 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Vehicles xmlns="http://www.example.com/db"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://www.example.com/db Vehicle.xsd"
-          >
-    <Vehicle>
-        <Automobile>
-            <Body>Nice</Body>
-            <DriveTrain>
-                <Engine>dd</Engine>
-                <Transmission>afk</Transmission>
-            </DriveTrain>
-            <Trunk>128L</Trunk>
-        </Automobile>
+          xsi:schemaLocation="http://www.example.com/db Vehicle.xsd">
+
+    <Vehicle xsi:type="AutomobileType">
+        <Body>4-door sedan</Body>
+        <DriveTrain>
+            <Engine>I4 2.0L CVVL/LPi</Engine>
+            <Transmission>A6MF1-2</Transmission>
+        </DriveTrain>
+        <Trunk>Trunk Cargo</Trunk>
+    </Vehicle>
+
+    <Vehicle xsi:type="SedanType">
+        <Body>4-door sedan</Body>
+        <DriveTrain>
+            <Engine>I4 2.0L CVVL/LPi</Engine>
+            <Transmission>A6MF1-2</Transmission>
+        </DriveTrain>
+        <Trunk>Trunk Cargo</Trunk>
+    </Vehicle>
+
+    <Vehicle xsi:type="ConvertibleType">
+        <Body>2-door convertible</Body>
+        <DriveTrain>
+            <Engine>5.2-liter V10 Gas</Engine>
+            <Transmission>7-Speed Automatic</Transmission>
+        </DriveTrain>
+        <Trunk>cargo space</Trunk>
+        <OperatingRoof/>
+    </Vehicle>
+
+    <Vehicle xsi:type="TruckType">
+        <Body>Wing body</Body>
+        <DriveTrain>
+            <Engine>l4</Engine>
+            <Transmission>5-Speed Automatic</Transmission>
+        </DriveTrain>
+        <Compartment>1 Ton</Compartment>
     </Vehicle>
 </Vehicles>
